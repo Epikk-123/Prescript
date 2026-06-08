@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Index Terminal</title>
+    <style>
+        body {
+            background-color: #030303;
+            color: #d1f7ff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+            text-shadow: 0 0 8px rgba(209, 247, 255, 0.6);
+        }
+        #container {
+            text-align: center;
+            max-width: 700px;
+            padding: 20px;
+        }
+        #prescript-text {
+            font-size: 1.6rem;
+            line-height: 1.5;
+            letter-spacing: 1px;
+            min-height: 120px;
+            white-space: pre-wrap;
+        }
+        .flicker { 
+            animation: flicker-anim 0.15s infinite; 
+        }
+        @keyframes flicker-anim { 
+            0% { opacity: 0.75; } 
+            50% { opacity: 1; } 
+            100% { opacity: 0.8; } 
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="prescript-text">【 CLICK TO RECEIVE PRESCRIPT 】</div>
+</div>
+
+<script>
+    const instructions = [
+        "Invert the contents of your pockets. Do not look inside.",
+        "Walk in a straight line for fifty steps, then turn ninety degrees.",
+        "Recite the names of three people you have forgotten.",
+        "Speak to the next person you see as if they are a long-lost shadow.",
+        "Hold your breath until the clock changes its minute.",
+        "Write a single letter on the palm of your hand and press it against glass.",
+        "Leave the light on in an empty room for exactly one hour.",
+        "Find something red. Carry it until sunset.",
+        "Stare at the nearest blank wall for exactly five minutes without blinking.",
+        "Arrange your footwear in descending order of material density.",
+        "Drink exactly three sips of lukewarm water while apologizing to the sink.",
+        "Get on Limbus and larp.",
+        "Call someone with a darker skin than you the n-word.",
+    ];
+
+    const display = document.getElementById('prescript-text');
+    let isTyping = false;
+
+    document.body.addEventListener('click', () => {
+        if (isTyping) return;
+        
+        isTyping = true;
+        display.classList.add('flicker');
+        
+        let selectedText = instructions[Math.floor(Math.random() * instructions.length)];
+        let fullMessage = `【 ${selectedText} 】`;
+        
+        display.textContent = ""; 
+        let i = 0;
+        
+        const type = () => {
+            if (i < fullMessage.length) {
+                display.textContent += fullMessage[i]; 
+                i++;
+                setTimeout(type, 40);
+            } else {
+                display.classList.remove('flicker');
+                isTyping = false;
+            }
+        };
+        type();
+    });
+</script>
+</body>
+</html>
