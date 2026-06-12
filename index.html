@@ -23,6 +23,17 @@
             text-align: center;
             max-width: 700px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #logo {
+            width: 180px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 12px rgba(209, 247, 255, 0.5));
+            transition: transform 0.1s ease;
         }
         #prescript-text {
             font-size: 1.6rem;
@@ -39,27 +50,43 @@
             50% { opacity: 1; } 
             100% { opacity: 0.8; } 
         }
+        /* Visual punch when the audio triggers */
+        .glitch-flash {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 25px rgba(209, 247, 255, 0.9)) brightness(1.2);
+        }
     </style>
 </head>
 <body>
 
 <div id="container">
+    <img id="logo" src="The_Index_Logo.png" alt="The Index Logo">
+    
     <div id="prescript-text">【 CLICK TO RECEIVE PRESCRIPT 】</div>
 </div>
 
+<audio id="prescript-audio" src="prescript.mp3" preload="auto"></audio>
+
 <script>
     const instructions = [
-        "Get on Limbus and larp.",
+        "Get on Limbus and larp."
     ];
 
     const display = document.getElementById('prescript-text');
+    const logo = document.getElementById('logo');
+    const audio = document.getElementById('prescript-audio');
     let isTyping = false;
 
     document.body.addEventListener('click', () => {
-        if (isTyping) return;
+        if (isTyping) return; 
         
         isTyping = true;
         display.classList.add('flicker');
+        logo.classList.add('glitch-flash');
+        
+        // Play the transmission sound notification
+        audio.currentTime = 0; 
+        audio.play().catch(err => console.log("Audio play blocked until user interaction style is registered:", err));
         
         let selectedText = instructions[Math.floor(Math.random() * instructions.length)];
         let fullMessage = `【 ${selectedText} 】`;
@@ -71,9 +98,10 @@
             if (i < fullMessage.length) {
                 display.textContent += fullMessage[i]; 
                 i++;
-                setTimeout(type, 40);
+                setTimeout(type, 35); // Slightly faster type rate for snappy alignment with audio duration
             } else {
                 display.classList.remove('flicker');
+                logo.classList.remove('glitch-flash');
                 isTyping = false;
             }
         };
